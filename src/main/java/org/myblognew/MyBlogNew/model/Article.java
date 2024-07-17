@@ -1,5 +1,5 @@
-//Résumé : Création d'une class Java qui va créer une table lors de son execution. C'est le @Entity qui permettra de "mapper"
-//(relier) à la base de donnée.
+/*Résumé : Création d'une class Java qui va créer une table lors de son execution. C'est le @Entity
+qui permettra de "mapper" (relier) à la base de donnée.*/
 
 package org.myblognew.MyBlogNew.model;
 
@@ -11,12 +11,12 @@ import java.time.LocalDateTime;
 public class Article {
 
     @Id //Cette annotation indique que la propriété annotée est la clé primaire de l'entité.
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //Spécifie que la valeur de la clé primaire sera générée automatiquement par
-    // la base de données.
+    @GeneratedValue(strategy = GenerationType.IDENTITY) /*Spécifie que la valeur de la clé primaire sera générée automatiquement par
+    la base de données.
 
-    //Chaque champ de la table Article est représenté par une propriété dans l'entité Article. Les types des propriétés dans la classe
-    // déterminent les types de champs correspondants dans la base de données. Hibernate, le framework ORM utilisé par Spring Data JPA,
-    // effectue ce mappage automatiquement.
+    Chaque champ de la table Article est représenté par une propriété dans l'entité Article. Les types des propriétés dans la classe
+    déterminent les types de champs correspondants dans la base de données. Hibernate, le framework ORM utilisé par Spring Data JPA,
+    effectue ce mappage automatiquement.*/
 
 
 
@@ -26,32 +26,33 @@ public class Article {
     private String title; //La propriété title est de type String, ce qui correspond à un champ de type VARCHAR en SQL.
 
     @Column(columnDefinition = "TEXT")
-    private String content; //La propriété content est également de type String. En SQL, Hibernate peut le mapper à TEXT ou
+    private String content; /*La propriété content est également de type String. En SQL, Hibernate peut le mapper à TEXT ou
     // VARCHAR en fonction de la longueur du contenu.
 
-    //Les propriétés createdAt et updatedAt sont de type LocalDateTime, ce qui correspond à un champ de type DATETIME ou TIMESTAMP en SQL.
-    // Ce type de champ est utilisé pour stocker des informations de date et d'heure.
+    Les propriétés createdAt et updatedAt sont de type LocalDateTime, ce qui correspond à un champ de type DATETIME ou TIMESTAMP en SQL.
+    Ce type de champ est utilisé pour stocker des informations de date et d'heure.*/
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
-//L'annotation @Column permet de spécifier les détails du champ dans la base de données qu'il n'est pas possible de
-// définir directement avec le type de données. Voici quelques attributs courants de cette annotation :
-//
-//L'attribut nullable indique si le champ peut contenir des valeurs NULL. Par défaut, cette valeur est true.
-//L'attribut length précise le nombre de caractères maximal pour les champs de type VARCHAR.
-//L'attribut columnDefinition permet de spécifier le type exact du champ dans la base de données. Par exemple,
-// @Column(columnDefinition = "TEXT") sur la propriété content indique que le champ content doit être de type TEXT.
+/*L'annotation @Column permet de spécifier les détails du champ dans la base de données qu'il n'est pas possible de
+définir directement avec le type de données. Voici quelques attributs courants de cette annotation :
 
-//L'attribut updatable sur la propriété createdAt avec comme valeur false empêche la mise à jour du champ.
-//Tu peux également utiliser l'attribut name qui spécifie le nom du champ dans la base de données. Par défaut,
-// le nom de la propriété est utilisé. Si ce nom est écrit en camelCase, comme les propriétés createdAt et updatedAt,
-// il est convertit en snake case (created_at et updated_at) dans la base de données MySQL, conformément à la la convention de nommage
-// que suit Spring Data JPA.
+L'attribut nullable indique si le champ peut contenir des valeurs NULL. Par défaut, cette valeur est true.
+L'attribut length précise le nombre de caractères maximal pour les champs de type VARCHAR.
+L'attribut columnDefinition permet de spécifier le type exact du champ dans la base de données. Par exemple,
+@Column(columnDefinition = "TEXT") sur la propriété content indique que le champ content doit être de type TEXT.
 
-//D'autres attributs te seront utiles, tels que unique qui ajoute une contrainte d'unicité (très utile s'assurer que
-// chaque utilisateur possède un email unique par exemple) ou precision et scale pour définir le format des propriétés liées à des tarifs
+L'attribut updatable sur la propriété createdAt avec comme valeur false empêche la mise à jour du champ.
+Tu peux également utiliser l'attribut name qui spécifie le nom du champ dans la base de données. Par défaut,
+le nom de la propriété est utilisé. Si ce nom est écrit en camelCase, comme les propriétés createdAt et updatedAt,
+il est convertit en snake case (created_at et updated_at) dans la base de données MySQL, conformément à la la convention de nommage
+que suit Spring Data JPA.
+
+D'autres attributs te seront utiles, tels que unique qui ajoute une contrainte d'unicité (très utile s'assurer que
+chaque utilisateur possède un email unique par exemple) ou precision et scale pour définir le format des propriétés liées à des tarifs*/
+
     // Getters et setters
 
     public Long getId() {
