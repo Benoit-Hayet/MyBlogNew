@@ -62,6 +62,46 @@ des articles dans le corps de la réponse.*/
         }
         return ResponseEntity.ok(articles);
     }
+    @GetMapping("/articles-date/{createdAt}")
+    public ResponseEntity<List<Article>> getArticlesByCreatedAt(@PathVariable LocalDateTime createdAt) {
+        List<Article> articles = articleRepository.findByCreatedAt(createdAt);
+        if (articles.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(articles);
+    }
+
+    @GetMapping("/latest")
+    public ResponseEntity<List<Article>> getLatestArticles() {
+        List<Article> articles = articleRepository.findTop5ByOrderByCreatedAtDesc();
+        if (articles.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(articles);
+    }
+
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity<List<Article>> getArticlesByContent(@PathVariable String keyword) {
+        List<Article> articles = articleRepository.findByContentContaining(keyword);
+        if (articles.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(articles);
+    }
+
+    @GetMapping("/created-after/{createdAt}")
+    public ResponseEntity<List<Article>> getArticlesCreatedAfter(@PathVariable String createdAt) {
+        try {
+            LocalDateTime dateTime = LocalDateTime.parse(createdAt);
+            List<Article> articles = articleRepository.findByCreatedAtAfter(dateTime);
+            if (articles.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(articles);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
 
     @PostMapping
     public ResponseEntity<Article> createArticle(@RequestBody Article article) {

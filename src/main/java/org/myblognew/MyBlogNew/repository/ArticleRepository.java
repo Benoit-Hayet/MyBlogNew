@@ -6,12 +6,17 @@ package org.myblognew.MyBlogNew.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.myblognew.MyBlogNew.model.Article;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     /*Création de requêtes personnalisées*/
     List<Article> findByTitle(String title);
+    List<Article> findByContentContaining(String keyword);
+    List<Article> findByCreatedAt(LocalDateTime createdAt);
+    List<Article> findByCreatedAtAfter(LocalDateTime createdAt);
+    List<Article> findTop5ByOrderByCreatedAtDesc();
 /*Le nom de la méthode suit le schéma findBy + NomDeLaPropriété (dans ce cas, Title).
 La méthode retourne une liste d'articles List<Article>.
 La méthode prend un paramètre title de type String.
