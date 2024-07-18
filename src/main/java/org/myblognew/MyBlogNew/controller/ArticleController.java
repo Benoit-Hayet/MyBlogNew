@@ -3,6 +3,8 @@ Création d'un contrôleur REST.*/
 
 package org.myblognew.MyBlogNew.controller;
 
+import org.myblognew.MyBlogNew.model.Category;
+import org.myblognew.MyBlogNew.repository.CategoryRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +20,11 @@ import java.util.Optional;
 public class ArticleController {
 
     private final ArticleRepository articleRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ArticleController(ArticleRepository articleRepository) {
+    public ArticleController(ArticleRepository articleRepository ,CategoryRepository categoryRepository) {
         this.articleRepository = articleRepository;
+        this.categoryRepository = categoryRepository;
     }
 /*@GetMapping : Indique que cette méthode doit gérer les requêtes HTTP GET à l'URL /articles.
 
@@ -107,6 +111,15 @@ des articles dans le corps de la réponse.*/
     public ResponseEntity<Article> createArticle(@RequestBody Article article) {
         article.setCreatedAt(LocalDateTime.now());
         article.setUpdatedAt(LocalDateTime.now());
+        if (article.getCategory() != null) {
+            Optional<Category> optionalCategory = categoryRepository.findById(article.getCategory().getId());
+            if (!optionalCategory.isPresent()) {
+                return ResponseEntity.badRequest().body(null);
+            }
+
+            Category category = optionalCategory.get();
+            article.setCategory(category);
+        }
         Article savedArticle = articleRepository.save(article);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedArticle);
     }
@@ -123,6 +136,15 @@ des articles dans le corps de la réponse.*/
         article.setTitle(articleDetails.getTitle());
         article.setContent(articleDetails.getContent());
         article.setUpdatedAt(LocalDateTime.now());
+
+        if (articleDetails.getCategory() != null) {
+            Optional<Category> optionalCategory = categoryRepository.findById(article.getCategory().getId());
+            if (!optionalCategory.isPresent()) {
+                return ResponseEntity.badRequest().body(null);
+            }
+            Category category = optionalCategory.get();
+            article.setCategory(category);
+        }
         Article updatedArticle = articleRepository.save(article);
         return ResponseEntity.ok(updatedArticle);
 

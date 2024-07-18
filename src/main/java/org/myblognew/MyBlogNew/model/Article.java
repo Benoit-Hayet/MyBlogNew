@@ -53,6 +53,16 @@ que suit Spring Data JPA.
 D'autres attributs te seront utiles, tels que unique qui ajoute une contrainte d'unicité (très utile s'assurer que
 chaque utilisateur possède un email unique par exemple) ou precision et scale pour définir le format des propriétés liées à des tarifs*/
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+    /*L'annotation @ManyToOne est utilisée pour définir une relation Many-to-One entre 2 entités.
+    Dans notre cas, plusieurs articles peuvent appartenir à une seule catégorie.
+
+L'annotation @JoinColumn(name = "category_id") spécifie le nom de la colonne de jointure à ajouter dans la table Article,
+category_id faisant référence à la clé primaire de la table Category.*/
+
+
     // Getters et setters
 
     public Long getId() {
@@ -93,5 +103,13 @@ chaque utilisateur possède un email unique par exemple) ou precision et scale p
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
