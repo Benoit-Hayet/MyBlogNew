@@ -6,7 +6,38 @@ package org.myblognew.MyBlogNew.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.myblognew.MyBlogNew.model.Article;
 
+import java.util.List;
+
 public interface ArticleRepository extends JpaRepository<Article, Long> {
+
+    /*Création de requêtes personnalisées*/
+    List<Article> findByTitle(String title);
+/*Le nom de la méthode suit le schéma findBy + NomDeLaPropriété (dans ce cas, Title).
+La méthode retourne une liste d'articles List<Article>.
+La méthode prend un paramètre title de type String.
+Nous venons de créer une méthode qui va retourner tous les articles de la base de données dont le titre est
+strictement égal au paramètre fourni.
+________________________________________________________________________________________________________________________
+Utilisation des méthodes dans le Controller
+
+Pour appeler cette méthode dans la classe ArticleController, il faut créer un endpoint qui permet de chercher des articles par leur titre.
+
+Méthode :
+"@GetMapping("/search-title")
+public ResponseEntity<List<Article>> getArticlesByTitle(@RequestParam String searchTerms) {
+    List<Article> articles = articleRepository.findByTitle(searchTerms);
+    if (articles.isEmpty()) {
+        return ResponseEntity.noContent().build();
+    }
+    return ResponseEntity.ok(articles);"
+}
+@GetMapping("/search-title") : Indique que cette méthode doit gérer les requêtes HTTP GET envoyées à l'URL /articles/search-title.
+@RequestParam String title : Extrait searchTerms en tant que paramètre de requête.
+Les @RequestParam se situent après le point d'interrogation ? dans l'URL, sous forme de paires clé-valeur séparées par des esperluettes &.
+
+articleRepository.findByTitle(searchTerms) : Appelle la méthode findByTitle de l'interface ArticleRepository pour récupérer les articles correspondant au titre donné.
+Si le champ recherché contient des caractères spéciaux, assure-toi que l'URL est bien encodée. Par exemple, les espaces doivent être encodés en %20. Pour tester ce code sur Postman, utilise l'URL http://localhost:8080/articles/search-title?searchTerms=Title%201.
+*/
 }
 
 

@@ -1,4 +1,4 @@
-/*Permet à l'application de gérer les requêtes HTTP et d'effectuer des opérations CRUD sur l'entité Article,
+/* Résumé : Permet à l'application de gérer les requêtes HTTP et d'effectuer des opérations CRUD sur l'entité Article,
 Création d'un contrôleur REST.*/
 
 package org.myblognew.MyBlogNew.controller;
@@ -52,6 +52,15 @@ des articles dans le corps de la réponse.*/
 
         Article article = optionalArticle.get();
         return ResponseEntity.ok(article);
+    }
+/*http://localhost:8080/articles/search-title?searchTerms=First%20Post*/
+    @GetMapping("/search-title")
+    public ResponseEntity<List<Article>> getArticlesByTitle(@RequestParam String searchTerms) {
+        List<Article> articles = articleRepository.findByTitle(searchTerms);
+        if (articles.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(articles);
     }
 
     @PostMapping
