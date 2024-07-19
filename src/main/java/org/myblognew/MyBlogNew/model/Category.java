@@ -1,10 +1,9 @@
 package org.myblognew.MyBlogNew.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Category {
@@ -13,6 +12,15 @@ public class Category {
 
     private Long id;
     private String name;
+
+    /*Ajoutr de la bidirectionnalité entre category et articles.
+
+    @OneToMany(mappedBy = "category") indique une relation one-to-many entre Category et Article.
+    L'attribut mappedBy spécifie que la relation est mappée par l'attribut category de l'entité Article.
+
+   */
+    @OneToMany(mappedBy = "category")
+    private List<Article> articles;
 
     public Long getId() {
         return id;
