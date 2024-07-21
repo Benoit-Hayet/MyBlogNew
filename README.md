@@ -27,3 +27,14 @@ Spring  5 :
 Mettre en place une relation many-to-one entre Article et Category,
 Comprendre et gérer les relations entre entités avec Spring Data JPA, 
 Implémenter une relation bidirectionnelle entre deux entités.
+
+Spring 6 : 
+
+Mettre en place une relation many-to-one entre Article et Category,
+Comprendre et gérer les relations entre entités avec Spring Data JPA, 
+Implémenter une relation bidirectionnelle entre deux entités.
+
+Spring 7 : 
+
+Mettre en place une relation many-to-many simple entre deux entités, 
+Gérer les relations complexes en utilisant Spring Data JPA.
