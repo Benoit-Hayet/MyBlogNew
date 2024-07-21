@@ -35,7 +35,7 @@ public class ArticleController {
             articleDTO.setCategoryId(article.getCategory().getId());
         }
         return articleDTO;
-
+    }
         private Article convertToEntity(ArticleDTO articleDTO) {
             Article article = new Article();
             article.setId(articleDTO.getId());
@@ -49,7 +49,7 @@ public class ArticleController {
             }
             return article;
         }
-    }
+
 
     public ArticleController(ArticleRepository articleRepository ,CategoryRepository categoryRepository) {
         this.articleRepository = articleRepository;
