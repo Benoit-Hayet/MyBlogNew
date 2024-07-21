@@ -21,3 +21,9 @@ Spring 4 :
 Créer des méthodes de requête personnalisées en utilisant les conventions de nommage de Spring Data JPA,
  Comprendre comment Spring Data JPA génère des requêtes basées sur les noms des méthodes,
  Tester les méthodes de requête 
+
+Spring  5 : 
+
+Mettre en place une relation many-to-one entre Article et Category,
+Comprendre et gérer les relations entre entités avec Spring Data JPA, 
+Implémenter une relation bidirectionnelle entre deux entités.
