@@ -6,6 +6,7 @@ package org.myblognew.MyBlogNew.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity //Cette annotation indique que cette classe est une entité JPA et sera mappée à une table de la base de données.
 public class Article {
@@ -62,6 +63,17 @@ chaque utilisateur possède un email unique par exemple) ou precision et scale p
 L'annotation @JoinColumn(name = "category_id") spécifie le nom de la colonne de jointure à ajouter dans la table Article,
 category_id faisant référence à la clé primaire de la table Category.*/
 
+    @ManyToMany
+    @JoinTable(
+            name = "article_tag",
+            joinColumns = @JoinColumn(name = "article_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    /*L'annotation @JoinTable est utilisée pour définir la table de jointure dans une relation many-to-many.
+    name = "article_tag" spécifie le nom de la table de jointure. Cette table contiendra les colonnes qui
+    référencent les IDs des entités Article et Tag.
+*/
+    private List<Tag> tags;
 
     // Getters et setters
 

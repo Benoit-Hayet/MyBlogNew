@@ -5,7 +5,9 @@ package org.myblognew.MyBlogNew.controller;
 
 import org.myblognew.MyBlogNew.dto.ArticleDTO;
 import org.myblognew.MyBlogNew.model.Category;
+import org.myblognew.MyBlogNew.model.Tag;
 import org.myblognew.MyBlogNew.repository.CategoryRepository;
+import org.myblognew.MyBlogNew.repository.TagRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +36,9 @@ public class ArticleController {
         if (article.getCategory() != null) {
             articleDTO.setCategoryId(article.getCategory().getId());
         }
+        if (article.getTags() != null) {
+            articleDTO.setTagIds(article.getTags().stream().map(Tag::getId).collect(Collectors.toList()));
+        }
         return articleDTO;
     }
         private Article convertToEntity(ArticleDTO articleDTO) {
@@ -46,6 +51,10 @@ public class ArticleController {
             if (articleDTO.getCategoryId() != null) {
                 Category category = categoryRepository.findById(articleDTO.getCategoryId()).orElse(null);
                 article.setCategory(category);
+            }
+            if (articleDTO.getTagIds() != null) {
+                List<Tag> tags = tagRepository.findAllById(articleDTO.getTagIds());
+                article.setTags(tags);
             }
             return article;
         }
