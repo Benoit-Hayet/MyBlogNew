@@ -25,6 +25,10 @@ public class ArticleController {
 
     private final ArticleRepository articleRepository;
     private final CategoryRepository categoryRepository;
+    private final TagRepository tagRepository;
+
+
+
 
     private ArticleDTO convertToDTO(Article article) {
         ArticleDTO articleDTO = new ArticleDTO();
@@ -60,9 +64,13 @@ public class ArticleController {
         }
 
 
-    public ArticleController(ArticleRepository articleRepository ,CategoryRepository categoryRepository) {
+    public ArticleController(
+            ArticleRepository articleRepository,
+            CategoryRepository categoryRepository,
+            TagRepository tagRepository) {  // Add TagRepository as a constructor parameter
         this.articleRepository = articleRepository;
         this.categoryRepository = categoryRepository;
+        this.tagRepository = tagRepository;  // Initialize tagRepository
     }
 /*@GetMapping : Indique que cette méthode doit gérer les requêtes HTTP GET à l'URL /articles.
 
@@ -207,3 +215,4 @@ correctement sérialisées, conformément aux champs définis dans ArticleDTO.*/
 
 
 }
+
