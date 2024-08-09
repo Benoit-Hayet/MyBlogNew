@@ -16,7 +16,7 @@ public class ArticleDTO {
     private LocalDateTime updatedAt;
     private Long categoryId;
     private List<Long> tagIds;
-
+    private List<ArticleAuthorDTO> authors;
     // Getters et setters
 
     public Long getId() {

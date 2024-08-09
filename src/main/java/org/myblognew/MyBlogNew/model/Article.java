@@ -75,6 +75,9 @@ category_id faisant référence à la clé primaire de la table Category.*/
 */
     private List<Tag> tags;
 
+    @OneToMany(mappedBy = "article")
+    private List<ArticleAuthor> articleAuthors;
+
     // Getters et setters
 
     public Long getId() {
