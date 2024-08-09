@@ -42,4 +42,5 @@ Gérer les relations complexes en utilisant Spring Data JPA.
 Spring 8 : 
 
 Mettre en place une relation many-to-many complexe entre deux entités,
+
 Gérer les relations complexes en utilisant Spring Data JPA.
