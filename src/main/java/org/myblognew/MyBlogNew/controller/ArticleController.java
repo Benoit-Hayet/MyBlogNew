@@ -3,16 +3,13 @@ Création d'un contrôleur REST.*/
 
 package org.myblognew.MyBlogNew.controller;
 
+import org.myblognew.MyBlogNew.Service.ArticleService;
 import org.myblognew.MyBlogNew.dto.ArticleDTO;
 import org.myblognew.MyBlogNew.model.Category;
-import org.myblognew.MyBlogNew.model.Tag;
-import org.myblognew.MyBlogNew.repository.CategoryRepository;
-import org.myblognew.MyBlogNew.repository.TagRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.myblognew.MyBlogNew.model.Article;
-import org.myblognew.MyBlogNew.repository.ArticleRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,90 +20,39 @@ import java.util.stream.Collectors;
 @RequestMapping("/articles") //@RequestMapping("/articles") : Spécifie que toutes les requêtes à ce contrôleur seront mappées à l'URL /articles.
 public class ArticleController {
 
-    private final ArticleRepository articleRepository;
-    private final CategoryRepository categoryRepository;
-    private final TagRepository tagRepository;
-
-
-
-
-    private ArticleDTO convertToDTO(Article article) {
-        ArticleDTO articleDTO = new ArticleDTO();
-        articleDTO.setId(article.getId());
-        articleDTO.setTitle(article.getTitle());
-        articleDTO.setContent(article.getContent());
-        articleDTO.setCreatedAt(article.getCreatedAt());
-        articleDTO.setUpdatedAt(article.getUpdatedAt());
-        if (article.getCategory() != null) {
-            articleDTO.setCategoryId(article.getCategory().getId());
-        }
-        if (article.getTags() != null) {
-            articleDTO.setTagIds(article.getTags().stream().map(Tag::getId).collect(Collectors.toList()));
-        }
-        return articleDTO;
-    }
-        private Article convertToEntity(ArticleDTO articleDTO) {
-            Article article = new Article();
-            article.setId(articleDTO.getId());
-            article.setTitle(articleDTO.getTitle());
-            article.setContent(articleDTO.getContent());
-            article.setCreatedAt(articleDTO.getCreatedAt());
-            article.setUpdatedAt(articleDTO.getUpdatedAt());
-            if (articleDTO.getCategoryId() != null) {
-                Category category = categoryRepository.findById(articleDTO.getCategoryId()).orElse(null);
-                article.setCategory(category);
-            }
-            if (articleDTO.getTagIds() != null) {
-                List<Tag> tags = tagRepository.findAllById(articleDTO.getTagIds());
-                article.setTags(tags);
-            }
-            return article;
-        }
+    private final ArticleService articleService;
 
 
     public ArticleController(
-            ArticleRepository articleRepository,
-            CategoryRepository categoryRepository,
-            TagRepository tagRepository) {  // Add TagRepository as a constructor parameter
-        this.articleRepository = articleRepository;
-        this.categoryRepository = categoryRepository;
-        this.tagRepository = tagRepository;  // Initialize tagRepository
+            ArticleService articleService) {
+        this.articleService = articleService;
+
     }
-/*@GetMapping : Indique que cette méthode doit gérer les requêtes HTTP GET à l'URL /articles.
 
-La méthode public ResponseEntity<List<Article>> getAllArticles() est définie pour retourner un ResponseEntity contenant
-une liste d'objets Article.
-
-articles.isEmpty() vérifie si la liste des articles est vide et retourne une réponse HTTP 204 No Content en utilisant ResponseEntity.
-noContent().build() le cas échéant qui signifie que la requête a été traitée avec succès, mais qu'aucun contenu n'est renvoyé.
-
-return ResponseEntity.ok(articles); : Si la liste des articles n'est pas vide, une réponse HTTP 200 OK est retournée avec la liste
-des articles dans le corps de la réponse.*/
+    /* Ancienne méthode avant les services :
 
     @GetMapping
-    /*public ResponseEntity<List<Article>> getAllArticles() {
-    Mise a jour de la méthode pour mise en place du DTO  */
-        public ResponseEntity<List<ArticleDTO>> getAllArticles() {
 
-            List<Article> articles = articleRepository.findAll();
+        public ResponseEntity<List<ArticleDTO>> getAllArticles() {
+            List<ArticleDTO> articles = articleRepository.findAll();
         if (articles.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        /*return ResponseEntity.ok(articles);
-        Mise a jour de la réponse en DTO
-
-        La méthode getAllArticles() convertit chaque objet Article récupéré en un objet ArticleDTO.
-
-articles.stream() convertit la liste d'articles en un flux (stream) de données.
-.map(this::convertToDTO) applique la méthode convertToDTO à chaque article dans le flux, transformant chaque Article en ArticleDTO.
-.collect(Collectors.toList()) collecte les résultats du flux dans une nouvelle liste de ArticleDTO.
-Récupère à nouveau tes articles via Postman : la boucle infinie ne se produit plus et tu obtiens désormais les données
-correctement sérialisées, conformément aux champs définis dans ArticleDTO.*/
         List<ArticleDTO> articleDTOs = articles.stream().map(this::convertToDTO).collect(Collectors.toList());
         return ResponseEntity.ok(articleDTOs);
+    }*/
+
+    @GetMapping
+    public ResponseEntity<List<ArticleDTO>> getAllArticles() {
+        List<ArticleDTO> articles = articleService.getAllArticles();
+        if (articles.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(articles);
     }
 
-    @GetMapping("/{id}")
+
+   /* @GetMapping("/{id}")
     public ResponseEntity<ArticleDTO> getArticleById(@PathVariable Long id) {
         Optional<Article> optionalArticle = articleRepository.findById(id);
         if (!optionalArticle.isPresent()) {
@@ -115,8 +61,21 @@ correctement sérialisées, conformément aux champs définis dans ArticleDTO.*/
         Article article = optionalArticle.get();
         return ResponseEntity.ok(convertToDTO(article));
     }
+*/
+   @GetMapping("/{id}")
+   public ResponseEntity<ArticleDTO> getArticleById(@PathVariable Long id) {
+       Optional<ArticleDTO> articleDTO = articleService.getArticleById(id);
+       if (!articleDTO.isPresent()) {
+           return ResponseEntity.notFound().build();
+       }
+       return ResponseEntity.ok(articleDTO.get());
+   }
+
 
 /*http://localhost:8080/articles/search-title?searchTerms=First%20Post*/
+
+    /*
+    Avant les services :
     @GetMapping("/search-title")
     public ResponseEntity<List<Article>> getArticlesByTitle(@RequestParam String searchTerms) {
         List<Article> articles = articleRepository.findByTitle(searchTerms);
@@ -124,7 +83,9 @@ correctement sérialisées, conformément aux champs définis dans ArticleDTO.*/
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(articles);
-    }
+    }*/
+
+    /*
     @GetMapping("/articles-date/{createdAt}")
     public ResponseEntity<List<Article>> getArticlesByCreatedAt(@PathVariable LocalDateTime createdAt) {
         List<Article> articles = articleRepository.findByCreatedAt(createdAt);
@@ -133,7 +94,12 @@ correctement sérialisées, conformément aux champs définis dans ArticleDTO.*/
         }
         return ResponseEntity.ok(articles);
     }
+    */
 
+
+
+
+    /*
     @GetMapping("/latest")
     public ResponseEntity<List<Article>> getLatestArticles() {
         List<Article> articles = articleRepository.findTop5ByOrderByCreatedAtDesc();
@@ -142,17 +108,18 @@ correctement sérialisées, conformément aux champs définis dans ArticleDTO.*/
         }
         return ResponseEntity.ok(articles);
     }
+    */
 
-    @GetMapping("/search/{keyword}")
+   /* @GetMapping("/search/{keyword}")
     public ResponseEntity<List<Article>> getArticlesByContent(@PathVariable String keyword) {
         List<Article> articles = articleRepository.findByContentContaining(keyword);
         if (articles.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(articles);
-    }
+    }*/
 
-    @GetMapping("/created-after/{createdAt}")
+    /*@GetMapping("/created-after/{createdAt}")
     public ResponseEntity<List<Article>> getArticlesCreatedAfter(@PathVariable String createdAt) {
         try {
             LocalDateTime dateTime = LocalDateTime.parse(createdAt);
@@ -164,16 +131,27 @@ correctement sérialisées, conformément aux champs définis dans ArticleDTO.*/
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-    }
+    }*/
+
+    /* Requete avant les services :
 
     @PostMapping
-    public ResponseEntity<ArticleDTO> createArticle(@RequestBody ArticleDTO articleDTO) {
+       public ResponseEntity<ArticleDTO> createArticle(@RequestBody ArticleDTO articleDTO) {
         Article article = convertToEntity(articleDTO);
         article.setCreatedAt(LocalDateTime.now());
         article.setUpdatedAt(LocalDateTime.now());
         Article savedArticle = articleRepository.save(article);
         return ResponseEntity.status(HttpStatus.CREATED).body(convertToDTO(savedArticle));
+    }*/
+    @PostMapping
+    public ResponseEntity<ArticleDTO> createArticle(@RequestBody ArticleDTO articleDTO) {
+        ArticleDTO savedArticleDTO = articleService.createArticle(articleDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedArticleDTO);
     }
+
+
+    /*
+    Requete avant les services :
 
     @PutMapping("/{id}")
     public ResponseEntity<ArticleDTO> updateArticle(@PathVariable Long id, @RequestBody ArticleDTO articleDTO) {
@@ -198,7 +176,18 @@ correctement sérialisées, conformément aux champs définis dans ArticleDTO.*/
 
         Article updatedArticle = articleRepository.save(article);
         return ResponseEntity.ok(convertToDTO(updatedArticle));
+    }*/
+    @PutMapping("/{id}")
+    public ResponseEntity<ArticleDTO> updateArticle(@PathVariable Long id, @RequestBody ArticleDTO articleDTO) {
+        Optional<ArticleDTO> updatedArticleDTO = articleService.updateArticle(id, articleDTO);
+        if (!updatedArticleDTO.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedArticleDTO.get());
     }
+
+    /*
+    Requete avant les services :
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
@@ -214,5 +203,15 @@ correctement sérialisées, conformément aux champs définis dans ArticleDTO.*/
     }
 
 
+}*/
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
+        if (articleService.deleteArticle(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
 
