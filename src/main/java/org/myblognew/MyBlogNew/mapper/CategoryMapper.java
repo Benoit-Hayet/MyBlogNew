@@ -17,7 +17,7 @@ public class CategoryMapper {
         this.categoryRepository = categoryRepository;
     }
 
-    private CategoryDTO convertToDTO(Category category) {
+    public CategoryDTO convertToDTO(Category category) {
         CategoryDTO categoryDTO = new CategoryDTO();
         categoryDTO.setId(category.getId());
         categoryDTO.setName(category.getName());
@@ -36,7 +36,7 @@ public class CategoryMapper {
         return categoryDTO;
     }
 
-    private Category convertToEntity(CategoryDTO categoryDTO) {
+    public Category convertToEntity(CategoryDTO categoryDTO) {
         Category category = new Category();
         category.setId(categoryDTO.getId());
         category.setName(categoryDTO.getName());

@@ -5,11 +5,9 @@ package org.myblognew.MyBlogNew.controller;
 
 import org.myblognew.MyBlogNew.Service.ArticleService;
 import org.myblognew.MyBlogNew.dto.ArticleDTO;
-import org.myblognew.MyBlogNew.model.Category;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.myblognew.MyBlogNew.model.Article;
 
 import java.time.LocalDateTime;
 import java.util.List;
