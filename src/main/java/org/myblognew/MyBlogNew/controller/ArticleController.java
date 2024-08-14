@@ -5,7 +5,9 @@ package org.myblognew.MyBlogNew.controller;
 
 import org.myblognew.MyBlogNew.dto.ArticleDTO;
 import org.myblognew.MyBlogNew.model.Category;
+import org.myblognew.MyBlogNew.model.Tag;
 import org.myblognew.MyBlogNew.repository.CategoryRepository;
+import org.myblognew.MyBlogNew.repository.TagRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,10 @@ public class ArticleController {
 
     private final ArticleRepository articleRepository;
     private final CategoryRepository categoryRepository;
+    private final TagRepository tagRepository;
+
+
+
 
     private ArticleDTO convertToDTO(Article article) {
         ArticleDTO articleDTO = new ArticleDTO();
@@ -33,6 +39,9 @@ public class ArticleController {
         articleDTO.setUpdatedAt(article.getUpdatedAt());
         if (article.getCategory() != null) {
             articleDTO.setCategoryId(article.getCategory().getId());
+        }
+        if (article.getTags() != null) {
+            articleDTO.setTagIds(article.getTags().stream().map(Tag::getId).collect(Collectors.toList()));
         }
         return articleDTO;
     }
@@ -47,13 +56,21 @@ public class ArticleController {
                 Category category = categoryRepository.findById(articleDTO.getCategoryId()).orElse(null);
                 article.setCategory(category);
             }
+            if (articleDTO.getTagIds() != null) {
+                List<Tag> tags = tagRepository.findAllById(articleDTO.getTagIds());
+                article.setTags(tags);
+            }
             return article;
         }
 
 
-    public ArticleController(ArticleRepository articleRepository ,CategoryRepository categoryRepository) {
+    public ArticleController(
+            ArticleRepository articleRepository,
+            CategoryRepository categoryRepository,
+            TagRepository tagRepository) {  // Add TagRepository as a constructor parameter
         this.articleRepository = articleRepository;
         this.categoryRepository = categoryRepository;
+        this.tagRepository = tagRepository;  // Initialize tagRepository
     }
 /*@GetMapping : Indique que cette méthode doit gérer les requêtes HTTP GET à l'URL /articles.
 
@@ -198,3 +215,4 @@ correctement sérialisées, conformément aux champs définis dans ArticleDTO.*/
 
 
 }
+

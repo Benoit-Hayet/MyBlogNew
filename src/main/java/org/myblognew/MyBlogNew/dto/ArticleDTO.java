@@ -6,6 +6,7 @@ C'est le principe des DTO (Data Transfer Objects).*/
 package org.myblognew.MyBlogNew.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ArticleDTO {
     private Long id;
@@ -14,6 +15,7 @@ public class ArticleDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Long categoryId;
+    private List<Long> tagIds;
 
     // Getters et setters
 
@@ -63,5 +65,13 @@ public class ArticleDTO {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public List<Long> getTagIds() {
+        return tagIds;
+    }
+
+    public void setTagIds(List<Long> tagIds) {
+        this.tagIds = tagIds;
     }
 }
