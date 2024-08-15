@@ -1,7 +1,9 @@
 package org.myblognew.MyBlogNew.Service;
 
+import org.myblognew.MyBlogNew.dto.ArticleDTO;
 import org.myblognew.MyBlogNew.dto.CategoryDTO;
 import org.myblognew.MyBlogNew.mapper.CategoryMapper;
+import org.myblognew.MyBlogNew.model.Article;
 import org.myblognew.MyBlogNew.model.Category;
 import org.myblognew.MyBlogNew.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
@@ -28,18 +30,18 @@ public class CategoryService {
 
     public CategoryDTO createCategory(CategoryDTO CategoryDTO) {
         Category category = categoryMapper.convertToEntity(CategoryDTO);
-        category.setCreatedAt(LocalDateTime.now());
-        category.setUpdatedAt(LocalDateTime.now());
+        category.setId(Long id);
+        category.setName(String name);
 
         Category savedCategory = CategoryRepository.save(category);
         return categoryMapper.convertToDTO(savedCategory);
     }
-    
+
     @GetMapping
     public List<CategoryDTO> getAllCategories() {
         List<Category> categories = categoryRepository.findAll();
-            return categories.stream().map(categoryMapper::convertToDTO).collect(Collectors.toList());
-        }
+        return categories.stream().map(categoryMapper::convertToDTO).collect(Collectors.toList());
+    }
 
     @GetMapping("/{id}")
     public Optional<CategoryDTO> getCategoryById(@PathVariable Long id) {
@@ -50,4 +52,28 @@ public class CategoryService {
 
         return Optional.of(categoryMapper.convertToDTO(optionalCategory.get()));
     }
+
+    public Optional<CategoryDTO> updateCategory(Long id, CategoryDTO categoryDTO) {
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+        if (!optionalCategory.isPresent()) {
+            return Optional.empty();
+        }
+        Category category = optionalCategory.get();
+        category.setName(categoryDTO.getName());
+
+        Category updateCategory = categoryRepository.save(category);
+        return Optional.of(categoryMapper.convertToDTO(updateCategory));
+
+    }
+
+    public Optional<CategoryDTO> deleteCategory(Long id) {
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+        if (!optionalCategory.isPresent()) {
+            return Optional.empty();
+        }
+        Category category = optionalCategory.get();
+        categoryRepository.delete(category);
+        return Optional.of(categoryMapper.convertToDTO(category));
+    }
 }
+

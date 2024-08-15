@@ -39,6 +39,7 @@ public class CategoryController {
     }
 
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
