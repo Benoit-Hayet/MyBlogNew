@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.myblognew.MyBlogNew.dto.TagDTO;
 
 
-
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,7 +24,14 @@ public class TagController {
         this.articleService = articleService;
     }
 
-
+@GetMapping
+public ResponseEntity<List<TagDTO>> getAllTags() {
+ List<TagDTO> tags = tagService.getAllTags();
+ if (tags.isEmpty()) {
+     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+ }
+ return new ResponseEntity<>(tags, HttpStatus.OK);
+}
 
     @PostMapping
     public ResponseEntity<TagDTO> createTag(@RequestBody TagDTO tagDTO) {
