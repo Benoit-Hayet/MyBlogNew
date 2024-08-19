@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class TagMapper {
-    private final TagRepository tagRepository;
+    public final TagRepository tagRepository;
     private final ArticleRepository articleRepository;
 
     public TagMapper(TagRepository tagRepository, ArticleRepository articleRepository) {

@@ -1,61 +1,54 @@
 package org.myblognew.MyBlogNew.controller;
 
 
+import org.myblognew.MyBlogNew.Service.ArticleService;
+import org.myblognew.MyBlogNew.Service.TagService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.myblognew.MyBlogNew.dto.TagDTO;
-import org.myblognew.MyBlogNew.model.Tag;
-import org.myblognew.MyBlogNew.model.Article;
-import org.myblognew.MyBlogNew.repository.TagRepository;
-import org.myblognew.MyBlogNew.repository.ArticleRepository;
 
-import java.util.List;
+
+
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tags")
 public class TagController {
 
-    private final TagRepository tagRepository;
-    private final ArticleRepository articleRepository;
+    public final TagService tagService;
+    public final ArticleService articleService;
 
-    public TagController(TagRepository tagRepository, ArticleRepository articleRepository) {
-        this.tagRepository = tagRepository;
-        this.articleRepository = articleRepository;
+    public TagController(TagService tagService, ArticleService articleService) {
+        this.tagService = tagService;
+        this.articleService = articleService;
     }
 
 
 
     @PostMapping
     public ResponseEntity<TagDTO> createTag(@RequestBody TagDTO tagDTO) {
-        Tag tag = convertToEntity(tagDTO);
-        Tag savedTag = tagRepository.save(tag);
-        return ResponseEntity.status(201).body(convertToDTO(savedTag));
+        TagDTO savedTagDTO = tagService.createTag(tagDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedTagDTO);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TagDTO> updateTag(@PathVariable Long id, @RequestBody TagDTO tagDTO) {
-        Optional<Tag> optionalTag = tagRepository.findById(id);
-        if (!optionalTag.isPresent()) {
+        Optional<TagDTO> updateTagDTO = tagService.updateTag(id,tagDTO);
+        if (!updateTagDTO.isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        Tag tag = optionalTag.get();
-        tag.setName(tagDTO.getName());
-        Tag updatedTag = tagRepository.save(tag);
-        return ResponseEntity.ok(convertToDTO(updatedTag));
+        return ResponseEntity.ok(updateTagDTO.get());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTag(@PathVariable Long id) {
-        Optional<Tag> optionalTag = tagRepository.findById(id);
-        if (!optionalTag.isPresent()) {
+        if (tagService.deleteTag(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
             return ResponseEntity.notFound().build();
         }
-        Tag tag = optionalTag.get();
-        tagRepository.delete(tag);
-        return ResponseEntity.noContent().build();
+
+
     }
-
-
 }

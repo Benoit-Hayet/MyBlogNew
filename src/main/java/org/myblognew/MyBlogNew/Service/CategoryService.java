@@ -4,7 +4,6 @@ import org.myblognew.MyBlogNew.dto.CategoryDTO;
 import org.myblognew.MyBlogNew.mapper.CategoryMapper;
 import org.myblognew.MyBlogNew.model.Category;
 import org.myblognew.MyBlogNew.repository.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +20,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
-    @Autowired
+
     public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
