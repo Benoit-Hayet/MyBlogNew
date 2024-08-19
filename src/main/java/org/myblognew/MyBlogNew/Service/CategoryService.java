@@ -1,16 +1,15 @@
 package org.myblognew.MyBlogNew.Service;
 
-import org.myblognew.MyBlogNew.dto.ArticleDTO;
 import org.myblognew.MyBlogNew.dto.CategoryDTO;
 import org.myblognew.MyBlogNew.mapper.CategoryMapper;
-import org.myblognew.MyBlogNew.model.Article;
 import org.myblognew.MyBlogNew.model.Category;
 import org.myblognew.MyBlogNew.repository.CategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,20 +21,19 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
+    @Autowired
     public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
     }
 
 
-    public CategoryDTO createCategory(CategoryDTO CategoryDTO) {
-        Category category = categoryMapper.convertToEntity(CategoryDTO);
-        category.setId(Long id);
-        category.setName(String name);
-
-        Category savedCategory = CategoryRepository.save(category);
+    public CategoryDTO createCategory(CategoryDTO categoryDTO) {
+        Category category = categoryMapper.convertToEntity(categoryDTO);
+        Category savedCategory = categoryRepository.save(category);
         return categoryMapper.convertToDTO(savedCategory);
     }
+
 
     @GetMapping
     public List<CategoryDTO> getAllCategories() {
@@ -66,14 +64,15 @@ public class CategoryService {
 
     }
 
-    public Optional<CategoryDTO> deleteCategory(Long id) {
+    public boolean deleteCategory(Long id) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if (!optionalCategory.isPresent()) {
-            return Optional.empty();
+            return false;
         }
-        Category category = optionalCategory.get();
-        categoryRepository.delete(category);
-        return Optional.of(categoryMapper.convertToDTO(category));
+        categoryRepository.delete(optionalCategory.get());
+        return true;
     }
 }
+
+
 
