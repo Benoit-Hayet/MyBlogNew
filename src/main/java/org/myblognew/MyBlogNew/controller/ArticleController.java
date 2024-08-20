@@ -60,11 +60,8 @@ public class ArticleController {
 */
    @GetMapping("/{id}")
    public ResponseEntity<ArticleDTO> getArticleById(@PathVariable Long id) {
-       Optional<ArticleDTO> articleDTO = articleService.getArticleById(id);
-       if (!articleDTO.isPresent()) {
-           return ResponseEntity.notFound().build();
-       }
-       return ResponseEntity.ok(articleDTO.get());
+       ArticleDTO articleDTO = articleService.getArticleById(id);
+       return ResponseEntity.ok(articleDTO);
    }
 
 

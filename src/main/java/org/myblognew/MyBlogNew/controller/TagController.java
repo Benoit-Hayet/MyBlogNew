@@ -16,8 +16,8 @@ import java.util.Optional;
 @RequestMapping("/tags")
 public class TagController {
 
-    public final TagService tagService;
-    public final ArticleService articleService;
+    private final TagService tagService;
+    private final ArticleService articleService;
 
     public TagController(TagService tagService, ArticleService articleService) {
         this.tagService = tagService;

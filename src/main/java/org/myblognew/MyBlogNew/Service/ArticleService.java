@@ -1,6 +1,7 @@
 package org.myblognew.MyBlogNew.Service;
 
 import org.myblognew.MyBlogNew.dto.ArticleDTO;
+import org.myblognew.MyBlogNew.exception.ResourceNotFoundException;
 import org.myblognew.MyBlogNew.mapper.ArticleMapper;
 import org.myblognew.MyBlogNew.model.Article;
 import org.myblognew.MyBlogNew.repository.ArticleRepository;
@@ -27,12 +28,11 @@ public class ArticleService {
         return articles.stream().map(articleMapper::convertToDTO).collect(Collectors.toList());
     }
 
-    public Optional<ArticleDTO> getArticleById(Long id) {
-        Optional<Article> optionalArticle = articleRepository.findById(id);
-        if (!optionalArticle.isPresent()) {
-            return Optional.empty();
-        }
-        return Optional.of(articleMapper.convertToDTO(optionalArticle.get()));
+
+    public ArticleDTO getArticleById(Long id) {
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("L'article avec l'id " + id + " n'a pas été trouvé"));
+        return articleMapper.convertToDTO(article);
     }
 
     public ArticleDTO createArticle(ArticleDTO articleDTO) {
