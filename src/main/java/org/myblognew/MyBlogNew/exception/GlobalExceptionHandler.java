@@ -7,8 +7,13 @@ une méthode générale pour les ressources non trouvées que nous appellerons h
 package org.myblognew.MyBlogNew.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -34,4 +39,14 @@ ajouter une méthode handleGlobalException à la classe GlobalExceptionHandler :
 Si une exception inattendue survient dans l'application, cette méthode garantit qu'une réponse appropriée est envoyée au client,
 même si l'erreur spécifique n'a pas été prévue.*/
 
+@ExceptionHandler(MethodArgumentNotValidException.class)
+public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    Map<String, String> errors = new HashMap<>();
+    ex.getBindingResult().getAllErrors().forEach((error) -> {
+        String fieldName = ((FieldError) error).getField();
+        String errorMessage = error.getDefaultMessage();
+        errors.put(fieldName, errorMessage);
+    });
+    return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+}
 }

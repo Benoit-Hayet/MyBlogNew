@@ -3,7 +3,9 @@ Création d'un contrôleur REST.*/
 
 package org.myblognew.MyBlogNew.controller;
 
+import jakarta.validation.Valid;
 import org.myblognew.MyBlogNew.Service.ArticleService;
+import org.myblognew.MyBlogNew.dto.ArticleCreateDTO;
 import org.myblognew.MyBlogNew.dto.ArticleDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -137,8 +139,8 @@ public class ArticleController {
         return ResponseEntity.status(HttpStatus.CREATED).body(convertToDTO(savedArticle));
     }*/
     @PostMapping
-    public ResponseEntity<ArticleDTO> createArticle(@RequestBody ArticleDTO articleDTO) {
-        ArticleDTO savedArticleDTO = articleService.createArticle(articleDTO);
+    public ResponseEntity<ArticleDTO> createArticle(@Valid @RequestBody ArticleCreateDTO articleCreateDTO) {
+        ArticleDTO savedArticleDTO = articleService.createArticle(articleCreateDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedArticleDTO);
     }
 

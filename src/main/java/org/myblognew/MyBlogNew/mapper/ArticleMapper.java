@@ -1,6 +1,7 @@
 package org.myblognew.MyBlogNew.mapper;
 
-import org.myblognew.MyBlogNew.dto.ArticleDTO;
+import org.myblognew.MyBlogNew.dto.ArticleCreateDTO;
+import org.myblognew.MyBlogNew.dto.articleCreateDTO;
 import org.myblognew.MyBlogNew.model.Article;
 import org.myblognew.MyBlogNew.model.Category;
 import org.myblognew.MyBlogNew.model.Tag;
@@ -22,37 +23,35 @@ public class ArticleMapper {
         this.tagRepository = tagRepository;
     }
 
-    public ArticleDTO convertToDTO(Article article) {
-        ArticleDTO articleDTO = new ArticleDTO();
-        articleDTO.setId(article.getId());
-        articleDTO.setTitle(article.getTitle());
-        articleDTO.setContent(article.getContent());
-        articleDTO.setCreatedAt(article.getCreatedAt());
-        articleDTO.setUpdatedAt(article.getUpdatedAt());
+    public articleCreateDTO convertToDTO(Article article) {
+        articleCreateDTO articleCreateDTO = new articleCreateDTO();
+        articleCreateDTO.setId(article.getId());
+        articleCreateDTO.setTitle(article.getTitle());
+        articleCreateDTO.setContent(article.getContent());
+        articleCreateDTO.setCreatedAt(article.getCreatedAt());
+        articleCreateDTO.setUpdatedAt(article.getUpdatedAt());
         if (article.getCategory() != null) {
-            articleDTO.setCategoryId(article.getCategory().getId());
+            articleCreateDTO.setCategoryId(article.getCategory().getId());
         }
         if (article.getTags() != null) {
-            articleDTO.setTagIds(article.getTags().stream().map(Tag::getId).collect(Collectors.toList()));
+            articleCreateDTO.setTagIds(article.getTags().stream().map(Tag::getId).collect(Collectors.toList()));
         }
-        return articleDTO;
+        return articleCreateDTO;
     }
 
-    public Article convertToEntity(ArticleDTO articleDTO) {
+    public Article convertToEntity(ArticleCreateDTO articleCreateDTO) {
         Article article = new Article();
-        article.setId(articleDTO.getId());
-        article.setTitle(articleDTO.getTitle());
-        article.setContent(articleDTO.getContent());
-        article.setCreatedAt(articleDTO.getCreatedAt());
-        article.setUpdatedAt(articleDTO.getUpdatedAt());
-        if (articleDTO.getCategoryId() != null) {
-            Optional<Category> optionalCategory = categoryRepository.findById(articleDTO.getCategoryId());
+        article.setTitle(articleCreateDTO.getTitle());
+        if (articleCreateDTO.getCategoryId() != null) {
+            Optional<Category> optionalCategory = categoryRepository.findById(articleCreateDTO.getCategoryId());
             optionalCategory.ifPresent(article::setCategory);
         }
-        if (articleDTO.getTagIds() != null) {
-            List<Tag> tags = tagRepository.findAllById(articleDTO.getTagIds());
+        if (articleCreateDTO.getTagIds() != null) {
+            List<Tag> tags = tagRepository.findAllById(articleCreateDTO.getTagIds());
             article.setTags(tags);
         }
         return article;
     }
+
 }
+

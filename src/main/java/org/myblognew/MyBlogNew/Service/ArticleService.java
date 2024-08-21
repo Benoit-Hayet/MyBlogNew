@@ -1,5 +1,6 @@
 package org.myblognew.MyBlogNew.Service;
 
+import org.myblognew.MyBlogNew.dto.ArticleCreateDTO;
 import org.myblognew.MyBlogNew.dto.ArticleDTO;
 import org.myblognew.MyBlogNew.exception.ResourceNotFoundException;
 import org.myblognew.MyBlogNew.mapper.ArticleMapper;
@@ -35,8 +36,9 @@ public class ArticleService {
         return articleMapper.convertToDTO(article);
     }
 
-    public ArticleDTO createArticle(ArticleDTO articleDTO) {
-        Article article = articleMapper.convertToEntity(articleDTO);
+    // ArticleService
+    public ArticleDTO createArticle(ArticleCreateDTO articleCreateDTO) {
+        Article article = articleMapper.convertToEntity(articleCreateDTO);
         article.setCreatedAt(LocalDateTime.now());
         article.setUpdatedAt(LocalDateTime.now());
 
